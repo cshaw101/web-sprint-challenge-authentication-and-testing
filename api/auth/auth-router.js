@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-router.post('/register', (req, res) => {
+router.post('/register', (req, res) => {   //:9000/api/auth/register
   res.end('implement register, please!');
   /*
     IMPLEMENT
@@ -29,7 +29,7 @@ router.post('/register', (req, res) => {
   */
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', (req, res) => { //:9000/api/auth/login
   res.end('implement login, please!');
   /*
     IMPLEMENT
@@ -57,3 +57,8 @@ router.post('/login', (req, res) => {
 });
 
 module.exports = router;
+
+/**i should make more middleware
+ * checkUsernameExists that checks if the username exists in the db or password being incorrect...should have a string that says "invalid credentials" 
+ * checkReqBody: checks to make sure that username and password are both in the request body. response should be "username and password required"
+ */
