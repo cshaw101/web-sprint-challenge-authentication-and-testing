@@ -1,7 +1,10 @@
 const router = require('express').Router();
+const bcrypt = require('bcrypt')
+const Users = require('./model')
 
-router.post('/register', (req, res) => {   //:9000/api/auth/register
-  res.end('implement register, please!');
+
+
+router.post('/register', async (req, res) => {   //:9000/api/auth/register
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -27,6 +30,17 @@ router.post('/register', (req, res) => {   //:9000/api/auth/register
     4- On FAILED registration due to the `username` being taken,
       the response body should include a string exactly as follows: "username taken".
   */
+      const { username, password } = req.body;
+
+      try {
+        
+        const newUser = await Users.add({ username, password });
+    
+        res.status(201).json({ message: 'User registered successfully', user: newUser });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
 });
 
 router.post('/login', (req, res) => { //:9000/api/auth/login
@@ -57,8 +71,13 @@ router.post('/login', (req, res) => { //:9000/api/auth/login
 });
 
 module.exports = router;
-
-/**i should make more middleware
- * checkUsernameExists that checks if the username exists in the db or password being incorrect...should have a string that says "invalid credentials" 
- * checkReqBody: checks to make sure that username and password are both in the request body. response should be "username and password required"
+/**
+ * plan of attack
+ * work on register endpoint first
+ * work on middleware 
+ * after middleware is tested and working. work on any other necessities for jwt to work 
+ * work on endpoints testing (bare minimum test, bare minimum code to pass test, and then refactor)
+ * work on sad paths first to flesh out error messages and such and then work on the happy path
  */
+
+
