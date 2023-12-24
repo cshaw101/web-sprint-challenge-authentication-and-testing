@@ -36,7 +36,7 @@ router.post('/register', async (req, res) => {   //:9000/api/auth/register
         
         const newUser = await Users.add({ username, password });
     
-        res.status(201).json({ message: 'User registered successfully', user: newUser });
+        res.status(201).json({ id: newUser.id, username: newUser.username, password: newUser.password });
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });

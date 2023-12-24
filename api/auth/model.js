@@ -9,7 +9,7 @@ async function add(user) {
       password: hashedPassword,
     });
     const insertedUser = await db('users')
-      .select('id', 'username')
+      .select('id', 'username', 'password')
       .where('id', id)
       .first();
   
