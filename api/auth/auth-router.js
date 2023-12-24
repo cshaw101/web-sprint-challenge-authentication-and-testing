@@ -39,7 +39,7 @@ router.post('/register', async (req, res) => {   //:9000/api/auth/register
         res.status(201).json({ id: newUser.id, username: newUser.username, password: newUser.password });
       } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ message: "username and password required" });
       }
 });
 

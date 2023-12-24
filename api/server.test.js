@@ -1,6 +1,7 @@
 // Write your tests here
 const request = require('supertest')
 const server = require('./server')
+const router = require('./auth/auth-router')
 test('sanity', () => {
   expect(true).toBe(true)
 })
