@@ -1,6 +1,8 @@
 const router = require('express').Router();
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const { checkUsernameExistsAlready } = require('./auth-middleware');
 const Users = require('./model')
+
 
 
 
@@ -33,7 +35,6 @@ router.post('/register', async (req, res) => {   //:9000/api/auth/register
       const { username, password } = req.body;
 
       try {
-        
         const newUser = await Users.add({ username, password });
     
         res.status(201).json({ id: newUser.id, username: newUser.username, password: newUser.password });

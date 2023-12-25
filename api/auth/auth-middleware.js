@@ -1,5 +1,8 @@
-const { JWT_SECRET } = require('../../secrets/index')
-const jwt = require('jsonwebtoken')
+
+
+const checkUsernameExistsAlready = async (req, res, next) => {
+
+}
 
 
 
@@ -9,3 +12,8 @@ const jwt = require('jsonwebtoken')
  * checkUsernameExists: checks to make sure the username is not already in the database
  * checkUsernameExistsAlready: checks to see if the username is already in the system and if it is checks to make sure the password matches or gives message of "invalid credentials"
  */
+
+
+module.exports = {
+    checkUsernameExistsAlready
+}

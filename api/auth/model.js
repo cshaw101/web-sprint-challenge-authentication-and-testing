@@ -14,10 +14,13 @@ async function add(user) {
       .first();
   
     return insertedUser;
+}
 
-
+function findByUsername(username) {
+//make a function that looks into the database and checks to see if the username provided is already in the database or not
 }
 
 module.exports = {
-    add
+    add,
+    findByUsername
 }
