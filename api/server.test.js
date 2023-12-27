@@ -1,17 +1,46 @@
 // Write your tests here
 const request = require('supertest')
 const server = require('./server')
-const router = require('./auth/auth-router')
+const Users = require('./auth/model')
 test('sanity', () => {
   expect(true).toBe(true)
 })
 
 
 
+test('should register a new user successfully', async () => {
+     try {
+       const newUser = {
+         username: 'testuser',
+         password: 'testpassword',
+       };
+   
+       const response = await request(server)
+         .post('/api/auth/register')
+         .send(newUser);
+   
+       expect(response.status).toBe(201);
+       expect(response.body).toHaveProperty('id');
+       expect(response.body).toHaveProperty('username', newUser.username);
+     } catch (error) {
+       console.error('Unexpected error during test:', error);
+     }
+   });
+   
 
-
-
-
+   describe('Failed Registration', () => {
+     it('should return "username and password required" if username or password is missing', async () => {
+       const invalidUser = {
+       };
+ 
+       const response = await request(server)
+         .post('/api/auth/register')
+         .send(invalidUser);
+ 
+       expect(response.status).toBe(500);
+       expect(response.body).toEqual({ message: 'username and password required' });
+     });
+   });
 
 
 

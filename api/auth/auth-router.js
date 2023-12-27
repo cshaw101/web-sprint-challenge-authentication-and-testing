@@ -35,15 +35,17 @@ router.post('/register', async (req, res, next) => {   //:9000/api/auth/register
 
       try {
         const existingUser = await Users.getByUsername(username);
-
+      
         if (existingUser) {
           return res.status(400).json({ message: 'username taken' });
         }
-
+      
         const newUser = await Users.add({ username, password });
-    
+      
         res.status(201).json({ id: newUser.id, username: newUser.username, password: newUser.password });
       } catch (error) {
+        console.error('Error during registration:', error);
+      
         res.status(500).json({ message: "username and password required" });
         next(error);
       }
