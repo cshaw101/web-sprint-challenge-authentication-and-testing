@@ -1,12 +1,11 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const { checkUsernameExistsAlready } = require('./auth-middleware');
 const Users = require('./model')
 
 
 
 
-router.post('/register', async (req, res) => {   //:9000/api/auth/register
+router.post('/register', async (req, res, next) => {   //:9000/api/auth/register
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -35,16 +34,28 @@ router.post('/register', async (req, res) => {   //:9000/api/auth/register
       const { username, password } = req.body;
 
       try {
+        const existingUser = await Users.getByUsername(username);
+
+        if (existingUser) {
+          return res.status(400).json({ message: 'username taken' });
+        }
+
         const newUser = await Users.add({ username, password });
     
         res.status(201).json({ id: newUser.id, username: newUser.username, password: newUser.password });
       } catch (error) {
-        console.error(error);
         res.status(500).json({ message: "username and password required" });
+        next(error);
       }
 });
 
-router.post('/login', (req, res) => { //:9000/api/auth/login
+
+
+
+
+
+
+router.post('/login', (req, res, next) => { //:9000/api/auth/login
   res.end('implement login, please!');
   /*
     IMPLEMENT
