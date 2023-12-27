@@ -57,8 +57,7 @@ router.post('/register', async (req, res, next) => {   //:9000/api/auth/register
 
 
 
-router.post('/login', (req, res, next) => { //:9000/api/auth/login
-  res.end('implement login, please!');
+router.post('/login', async (req, res, next) => { //:9000/api/auth/login
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -82,6 +81,21 @@ router.post('/login', (req, res, next) => { //:9000/api/auth/login
     4- On FAILED login due to `username` not existing in the db, or `password` being incorrect,
       the response body should include a string exactly as follows: "invalid credentials".
   */
+      const { username, password } = req.body;
+
+      try {
+        const user = await Users.getByUsername(username);
+      
+        if (!user || !bcrypt.compareSync(password, user.password)) {
+          res.status(401).json({ message: 'Invalid Credentials' });
+        } else {
+          res.status(200).json({ message: `Welcome, ${user.username}` });
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        next(error);
+      }
+      
 });
 
 module.exports = router;
