@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const Users = require('./model')
-
+const jwt = require('jsonwebtoken')
+const { JWT_SECRET } = require("../../secrets");
 
 
 
@@ -85,11 +86,15 @@ router.post('/login', async (req, res, next) => { //:9000/api/auth/login
 
       try {
         const user = await Users.getByUsername(username);
-      
-        if (!user || !bcrypt.compareSync(password, user.password)) {
-          res.status(401).json({ message: 'Invalid Credentials' });
+    
+        if (user && bcrypt.compareSync(password, user.password)) {
+          // Set the user in the request
+          req.user = user;
+    
+          const token = buildToken(req.user);
+          res.status(200).json({ message: `welcome, ${user.username}`, token });
         } else {
-          res.status(200).json({ message: `Welcome, ${user.username}` });
+          res.status(401).json({ message: 'Invalid Credentials' });
         }
       } catch (error) {
         console.error('Error during login:', error);
@@ -98,14 +103,17 @@ router.post('/login', async (req, res, next) => { //:9000/api/auth/login
       
 });
 
-module.exports = router;
-/**
- * plan of attack
- * work on register endpoint first
- * work on middleware 
- * after middleware is tested and working. work on any other necessities for jwt to work 
- * work on endpoints testing (bare minimum test, bare minimum code to pass test, and then refactor)
- * work on sad paths first to flesh out error messages and such and then work on the happy path
- */
+function buildToken(user) {
+  const payload = {
+    subject: user.id,
+    username: user.username,
+  }
+  const options = {
+    expiresIn: '1d',
+  }
+  return jwt.sign(payload, JWT_SECRET, options)
+}
 
+
+module.exports = router;
 
