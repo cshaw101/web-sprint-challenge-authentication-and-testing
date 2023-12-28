@@ -84,6 +84,7 @@ router.post('/login', async (req, res, next) => { //:9000/api/auth/login
   */
       const { username, password } = req.body;
 
+
       try {
         const user = await Users.getByUsername(username);
     
@@ -94,7 +95,7 @@ router.post('/login', async (req, res, next) => { //:9000/api/auth/login
           const token = buildToken(req.user);
           res.status(200).json({ message: `welcome, ${user.username}`, token });
         } else {
-          res.status(401).json({ message: 'Invalid Credentials' });
+          res.status(401).json({ message: 'invalid Credentials' });
         }
       } catch (error) {
         console.error('Error during login:', error);
