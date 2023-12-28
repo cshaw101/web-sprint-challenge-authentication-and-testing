@@ -83,6 +83,9 @@ router.post('/login', async (req, res, next) => { //:9000/api/auth/login
       the response body should include a string exactly as follows: "invalid credentials".
   */
       const { username, password } = req.body;
+      if (!username || !password) {
+        res.status(400).json({ message: 'username and password required' })
+      }
 
 
       try {
