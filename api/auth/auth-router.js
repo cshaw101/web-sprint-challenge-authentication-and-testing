@@ -83,25 +83,26 @@ router.post('/login', async (req, res, next) => { //:9000/api/auth/login
       the response body should include a string exactly as follows: "invalid credentials".
   */
       const { username, password } = req.body;
+
       if (!username || !password) {
-        res.status(400).json({ message: 'username and password required' })
+        return res.status(400).json({ message: 'username and password required' });
       }
-
-
+    
       try {
         const user = await Users.getByUsername(username);
     
         if (user && bcrypt.compareSync(password, user.password)) {
-          // Set the user in the request
-          req.user = user;
+          
+          req.user = user; // this is to add the user in the request
     
           const token = buildToken(req.user);
           res.status(200).json({ message: `welcome, ${user.username}`, token });
         } else {
-          res.status(401).json({ message: 'invalid Credentials' });
+          res.status(401).json({ message: 'invalid credentials' });
         }
       } catch (error) {
         console.error('Error during login:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
         next(error);
       }
       
