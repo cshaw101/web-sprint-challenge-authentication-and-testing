@@ -42,7 +42,34 @@ test('should register a new user successfully', async () => {
      });
    });
 
+// server.test.js
 
+describe('POST /api/auth/login', () => {
+  it('should return a success message and token on successful login', async () => {
+    const response = await request(server)
+      .post('/api/auth/login')
+      .send({
+        username: 'Captain Marvel',
+        password: 'foobar',
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('message', 'welcome, Captain Marvel');
+    expect(response.body).toHaveProperty('token');
+  });
+
+  it('should return an error message for invalid credentials', async () => {
+    const response = await request(server)
+      .post('/api/auth/login')
+      .send({
+        username: 'InvalidUser',
+        password: 'InvalidPassword',
+      });
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty('message', 'invalid credentials');
+  });
+});
 
 
 
